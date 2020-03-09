@@ -1,0 +1,36 @@
+syntax = 'proto2';
+
+package CRM;
+
+option go_package = "CRM";
+
+service GetCluster {
+	rpc GetCluster (ClusterInfo) returns (ClusterInfo) {}
+}
+
+message ClusterInfo {
+	repeated string MetricValue = 1;
+	optional string Clustername = 2;
+	optional string KubeConfig = 3;
+	optional string AdminToken = 4;
+	repeated NodeInfo NodeList = 5;
+	map<string, Metric> ClusterMetricSum = 6;
+	optional string Host = 7;
+}
+message NodeInfo {
+	optional string NodeName = 1;
+	repeated PodInfo PodList = 2;
+	map<string, Metric> NodeMetricSum = 3;
+	optional float CpuCores = 4;
+	optional float MemoryTotal = 5;
+	optional float ScrapeError = 6;
+}
+message PodInfo{
+	optional string PodName = 1;
+	map<string, Metric> PodMetrics = 2;
+}
+
+
+message Metric {
+	optional float Value = 1;
+}

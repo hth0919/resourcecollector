@@ -442,8 +442,5 @@ func responseTokenizer(ci *ClusterInfo, nodename string,indexnum int) {
 }
 
 func homeDir() string {
-	if h := os.Getenv("HOME"); h != "" {
-		return h
-	}
-	return os.Getenv("USERPROFILE") // windows
+	return "/usr/local/bin/config"
 }

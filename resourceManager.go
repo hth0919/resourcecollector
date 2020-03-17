@@ -12,7 +12,6 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"fmt"
 )
 
 func initmeticmap() map[string]float64 {
@@ -88,22 +87,14 @@ var sharpflag bool= false
 
 func (ci *ClusterInfo)NewClusterClient(masterUri string) {
 
-	metricValue = []string{"cpu_cfs_periods_total", "cpu_cfs_throttled_periods_total", "cpu_cfs_throttled_seconds_total", "cpu_load_average_10s", "cpu_system_seconds_total", "cpu_usage_seconds_total", "cpu_user_seconds_total", "fs_inodes_free", "fs_inodes_total", "fs_io_current", "fs_io_time_seconds_total", "fs_io_time_weighted_seconds_total", "fs_limit_bytes", "fs_read_seconds_total", "fs_reads_bytes_total", "fs_reads_merged_total", "fs_reads_total", "fs_sector_reads_total", "fs_sector_writes_total", "fs_usage_bytes", "fs_write_seconds_total", "fs_writes_bytes_total", "fs_writes_merged_total", "fs_writes_total", "last_seen", "memory_cache", "memory_failcnt", "memory_failures_total", "memory_mapped_file", "memory_max_usage_bytes", "memory_rss", "memory_swap", "memory_usage_bytes", "memory_working_set_bytes", "network_receive_bytes_total", "network_receive_errors_total", "network_receive_packets_dropped_total", "network_receive_packets_total", "sockets", "network_transmit_bytes_total", "network_transmit_errors_total", "network_transmit_packets_dropped_total", "network_transmit_packets_total", "scrape_error", "spec_cpu_period", "spec_cpu_quota", "spec_cpu_shares", "spec_memory_limit_bytes", "spec_memory_reservation_limit_bytes", "spec_memory_swap_limit_bytes", "start_time_seconds", "tasks_state", "machine_cpu_cores", "machine_memory_bytes"}
+	
 	ci.ClusterMetricSum =initmeticmap()
-	fmt.Println("1:",ci.KubeConfig,":::::::",&ci.KubeConfig)
-	if !flag.Parsed() {
-		if home := homeDir(); home != "" {
-			ci.KubeConfig = *flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
-		} else {
-			ci.KubeConfig = *flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
-		}
+	if home := homeDir(); home != "" {
+		ci.KubeConfig = *flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
+	} else {
+		ci.KubeConfig = *flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
 	}
-	fmt.Println("2:",ci.KubeConfig,":::::::",&ci.KubeConfig)
 	flag.Parse()
-	fmt.Println()
-	fmt.Println()
-	fmt.Println()
-	fmt.Println("3:",ci.KubeConfig,":::::::",&ci.KubeConfig)
 	config, err := clientcmd.BuildConfigFromFlags(masterUri, ci.KubeConfig)
 	if err != nil {
 		panic(err.Error())
@@ -130,7 +121,7 @@ func (ci *ClusterInfo)NewClusterClient(masterUri string) {
 
 func (ci *ClusterInfo)NodeListInit() {
 	var ni *NodeInfo
-
+	metricValue = []string{"cpu_cfs_periods_total", "cpu_cfs_throttled_periods_total", "cpu_cfs_throttled_seconds_total", "cpu_load_average_10s", "cpu_system_seconds_total", "cpu_usage_seconds_total", "cpu_user_seconds_total", "fs_inodes_free", "fs_inodes_total", "fs_io_current", "fs_io_time_seconds_total", "fs_io_time_weighted_seconds_total", "fs_limit_bytes", "fs_read_seconds_total", "fs_reads_bytes_total", "fs_reads_merged_total", "fs_reads_total", "fs_sector_reads_total", "fs_sector_writes_total", "fs_usage_bytes", "fs_write_seconds_total", "fs_writes_bytes_total", "fs_writes_merged_total", "fs_writes_total", "last_seen", "memory_cache", "memory_failcnt", "memory_failures_total", "memory_mapped_file", "memory_max_usage_bytes", "memory_rss", "memory_swap", "memory_usage_bytes", "memory_working_set_bytes", "network_receive_bytes_total", "network_receive_errors_total", "network_receive_packets_dropped_total", "network_receive_packets_total", "sockets", "network_transmit_bytes_total", "network_transmit_errors_total", "network_transmit_packets_dropped_total", "network_transmit_packets_total", "scrape_error", "spec_cpu_period", "spec_cpu_quota", "spec_cpu_shares", "spec_memory_limit_bytes", "spec_memory_reservation_limit_bytes", "spec_memory_swap_limit_bytes", "start_time_seconds", "tasks_state", "machine_cpu_cores", "machine_memory_bytes"}
 	nodes, err :=cs.clientSet.CoreV1().Nodes().List(metav1.ListOptions{})
 	if err != nil {
 		panic(err.Error())

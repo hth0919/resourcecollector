@@ -2,11 +2,10 @@ package CRM
 
 import (
 	"crypto/tls"
-	"flag"
 	"io/ioutil"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/tools/clientcmd"
+	"k8s.io/client-go/rest"
 	"net/http"
 	"strconv"
 	"strings"
@@ -87,9 +86,10 @@ func (ci *ClusterInfo)NewClusterClient(masterUri string) {
 
 	
 	ci.ClusterMetricSum =initmeticmap()
-	ci.KubeConfig = homeDir()
-	flag.Parse()
-	config, err := clientcmd.BuildConfigFromFlags(masterUri, ci.KubeConfig)
+	config, err := rest.InClusterConfig()
+	if err != nil {
+		panic(err.Error())
+	}
 	if err != nil {
 		panic(err.Error())
 	}

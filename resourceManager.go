@@ -87,7 +87,7 @@ func (ci *ClusterInfo)NewClusterClient(masterUri string) {
 
 	
 	ci.ClusterMetricSum =initmeticmap()
-	ci.KubeConfig = homDir()
+	ci.KubeConfig = homeDir()
 	flag.Parse()
 	config, err := clientcmd.BuildConfigFromFlags(masterUri, ci.KubeConfig)
 	if err != nil {

@@ -8,8 +8,6 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 	"net/http"
-	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
 )
@@ -89,11 +87,7 @@ func (ci *ClusterInfo)NewClusterClient(masterUri string) {
 
 	
 	ci.ClusterMetricSum =initmeticmap()
-	if home := homeDir(); home != "" {
-		ci.KubeConfig = *flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
-	} else {
-		ci.KubeConfig = *flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
-	}
+	ci.KubeConfig = homDir()
 	flag.Parse()
 	config, err := clientcmd.BuildConfigFromFlags(masterUri, ci.KubeConfig)
 	if err != nil {

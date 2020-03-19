@@ -33,3 +33,9 @@ type PodInfo struct {
 	XXX_unrecognized     []byte             `json:"-"`
 	XXX_sizecache        int32              `json:"-"`
 }
+type TimeTick struct {
+	Tick                 int64    `protobuf:"varint,1,opt,name=Tick,proto3" json:"Tick,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}

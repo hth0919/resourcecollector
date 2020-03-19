@@ -2,7 +2,7 @@ syntax = 'proto3';
 
 package CRM;
 
-service GetCluster {
+service SendCluster {
 	rpc SendCluster (ClusterInfo) returns (TimeTick) {}
 }
 

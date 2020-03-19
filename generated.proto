@@ -3,7 +3,7 @@ syntax = 'proto3';
 package CRM;
 
 service GetCluster {
-	rpc GetCluster (ClusterInfo) returns (ClusterInfo) {}
+	rpc SendCluster (ClusterInfo) returns (TimeTick) {}
 }
 
 message ClusterInfo {
@@ -28,12 +28,6 @@ message PodInfo{
 	map<string, double> PodMetrics = 2;
 }
 
-
-
-
-
-
-
-
-
-
+message TimeTick {
+	int64 Tick =1;
+}

@@ -14,6 +14,7 @@ message ClusterInfo {
 	repeated NodeInfo NodeList = 5;
 	map<string, double> ClusterMetricSum = 6;
 	string Host = 9;
+	repeated string Pods = 10;
 }
 message NodeInfo {
 	string NodeName = 1;

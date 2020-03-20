@@ -11,11 +11,11 @@ type ClusterInfo struct {
 	NodeList             []*NodeInfo        `protobuf:"bytes,5,rep,name=NodeList,proto3" json:"NodeList,omitempty"`
 	ClusterMetricSum     map[string]float64 `protobuf:"bytes,6,rep,name=ClusterMetricSum,proto3" json:"ClusterMetricSum,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"fixed64,2,opt,name=value,proto3"`
 	Host                 string             `protobuf:"bytes,9,opt,name=Host,proto3" json:"Host,omitempty"`
+	Pods                 []string           `protobuf:"bytes,10,rep,name=Pods,proto3" json:"Pods,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
 	XXX_unrecognized     []byte             `json:"-"`
 	XXX_sizecache        int32              `json:"-"`
 }
-
 type NodeInfo struct {
 	NodeName             string             `protobuf:"bytes,1,opt,name=NodeName,proto3" json:"NodeName,omitempty"`
 	PodList              []*PodInfo         `protobuf:"bytes,2,rep,name=PodList,proto3" json:"PodList,omitempty"`
@@ -37,6 +37,7 @@ type PodInfo struct {
 	XXX_unrecognized     []byte             `json:"-"`
 	XXX_sizecache        int32              `json:"-"`
 }
+
 type ReturnValue struct {
 	Tick                 int64    `protobuf:"varint,1,opt,name=Tick,proto3" json:"Tick,omitempty"`
 	ClusterName          string   `protobuf:"bytes,2,opt,name=ClusterName,proto3" json:"ClusterName,omitempty"`

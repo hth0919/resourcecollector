@@ -84,17 +84,20 @@ var sharpflag bool= false
 
 func (ci *ClusterInfo)NewClusterClient(masterUri string) {
 	ci.ClusterMetricSum =initmeticmap()
+
 	config, err := rest.InClusterConfig()
 	if err != nil {
 		panic(err.Error())
 	}
 	ci.Host = config.Host
 	cs.clientSet, err = kubernetes.NewForConfig(config)
+	ci.Pods = make([]string,0,1)
 	if err != nil {
 		panic(err.Error())
 	}
 	secrets, _ := cs.clientSet.CoreV1().Secrets(metav1.NamespaceAll).List(metav1.ListOptions{})
-
+	P,_:=cs.clientSet.CoreV1().Pods("rescollect").List(metav1.ListOptions{})
+	ci.Pods = append(ci.Pods,P.Items[0].Name)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -106,6 +109,7 @@ func (ci *ClusterInfo)NewClusterClient(masterUri string) {
 			ci.AdminToken = strings.TrimSpace(ci.AdminToken)
 		}
 	}
+
 }
 
 func (ci *ClusterInfo)NodeListInit() {
@@ -297,6 +301,7 @@ func parser(ci *ClusterInfo, str string, indexnum int) []*PodInfo{
 			temp = pi.PodMetrics[tempmericvalue]
 			temp += tempvalue
 			pi.PodMetrics[tempmericvalue] = temp
+
 			if index == -1 {
 				pil = append(pil, pi)
 			} else {

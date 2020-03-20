@@ -1,4 +1,4 @@
-module rescollect
+module github.com/hth0919/resourcecollector
 
 go 1.13
 

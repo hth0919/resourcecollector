@@ -13,15 +13,18 @@ message ClusterInfo {
 	string AdminToken = 4;
 	repeated NodeInfo NodeList = 5;
 	map<string, double> ClusterMetricSum = 6;
-	string Host = 7;
+	string Host = 9;
 }
 message NodeInfo {
 	string NodeName = 1;
 	repeated PodInfo PodList = 2;
 	map<string, double> NodeMetricSum = 3;
-	double CpuCores = 4;
-	double MemoryTotal = 5;
-	double ScrapeError = 6;
+	map<string, int64> NodeCapacity = 4;
+	map<string, int64> NodeAllocatable = 5;
+	map<string, string> GeoInfo = 6;
+	double CpuCores = 7;
+	double MemoryTotal = 8;
+	double ScrapeError = 9;
 }
 message PodInfo{
 	string PodName = 1;

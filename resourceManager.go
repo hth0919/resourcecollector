@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"k8s.io/client-go/tools/clientcmd"
 )
 
 func initmeticmap() map[string]float64 {
@@ -83,13 +84,8 @@ var valueflag bool= false
 var sharpflag bool= false
 
 func (ci *ClusterInfo)NewClusterClient(masterUri string) {
-
-	
 	ci.ClusterMetricSum =initmeticmap()
 	config, err := rest.InClusterConfig()
-	if err != nil {
-		panic(err.Error())
-	}
 	if err != nil {
 		panic(err.Error())
 	}
@@ -115,6 +111,7 @@ func (ci *ClusterInfo)NewClusterClient(masterUri string) {
 
 func (ci *ClusterInfo)NodeListInit() {
 	var ni *NodeInfo
+
 	metricValue = []string{"cpu_cfs_periods_total", "cpu_cfs_throttled_periods_total", "cpu_cfs_throttled_seconds_total", "cpu_load_average_10s", "cpu_system_seconds_total", "cpu_usage_seconds_total", "cpu_user_seconds_total", "fs_inodes_free", "fs_inodes_total", "fs_io_current", "fs_io_time_seconds_total", "fs_io_time_weighted_seconds_total", "fs_limit_bytes", "fs_read_seconds_total", "fs_reads_bytes_total", "fs_reads_merged_total", "fs_reads_total", "fs_sector_reads_total", "fs_sector_writes_total", "fs_usage_bytes", "fs_write_seconds_total", "fs_writes_bytes_total", "fs_writes_merged_total", "fs_writes_total", "last_seen", "memory_cache", "memory_failcnt", "memory_failures_total", "memory_mapped_file", "memory_max_usage_bytes", "memory_rss", "memory_swap", "memory_usage_bytes", "memory_working_set_bytes", "network_receive_bytes_total", "network_receive_errors_total", "network_receive_packets_dropped_total", "network_receive_packets_total", "sockets", "network_transmit_bytes_total", "network_transmit_errors_total", "network_transmit_packets_dropped_total", "network_transmit_packets_total", "scrape_error", "spec_cpu_period", "spec_cpu_quota", "spec_cpu_shares", "spec_memory_limit_bytes", "spec_memory_reservation_limit_bytes", "spec_memory_swap_limit_bytes", "start_time_seconds", "tasks_state", "machine_cpu_cores", "machine_memory_bytes"}
 	nodes, err :=cs.clientSet.CoreV1().Nodes().List(metav1.ListOptions{})
 	if err != nil {
@@ -123,18 +120,29 @@ func (ci *ClusterInfo)NodeListInit() {
 	ci.NodeList = make([]*NodeInfo,0,len(nodes.Items))
 	for i:=0;i<len(nodes.Items);i++ {
 		ni = &NodeInfo{
-			NodeName:      "",
-			PodList:       []*PodInfo{},
-			NodeMetricSum: map[string]float64{},
-			CpuCores:      0,
-			MemoryTotal:   0,
-			ScrapeError:   0,
+			NodeName:        "",
+			PodList:         []*PodInfo{},
+			NodeMetricSum:   map[string]float64{},
+			NodeAllocatable: map[string]int64{},
+			NodeCapacity:    map[string]int64{},
+			GeoInfo:		 map[string]string{},
+			CpuCores:        0,
+			MemoryTotal:     0,
+			ScrapeError:     0,
 		}
 		ni.NodeMetricSum = initmeticmap()
 		ci.NodeList = append(ci.NodeList, ni)
 	}
 	for i:=0;i<len(nodes.Items);i++ {
 		ci.NodeList[i].NodeName = nodes.Items[i].Name
+		ci.NodeList[i].NodeCapacity["CPU"] = nodes.Items[i].Status.Capacity.Cpu().Value()
+		ci.NodeList[i].NodeAllocatable["CPU"] = nodes.Items[i].Status.Allocatable.Cpu().Value()
+		ci.NodeList[i].NodeCapacity["Memory"] = nodes.Items[i].Status.Capacity.Memory().Value()
+		ci.NodeList[i].NodeAllocatable["Memory"] = nodes.Items[i].Status.Allocatable.Memory().Value()
+		ci.NodeList[i].NodeCapacity["EphemeralStorage"] = nodes.Items[i].Status.Capacity.StorageEphemeral().Value()
+		ci.NodeList[i].NodeAllocatable["EphemeralStorage"] = nodes.Items[i].Status.Allocatable.StorageEphemeral().Value()
+		ci.NodeList[i].GeoInfo["Region"] = nodes.Items[i].Labels["failure-domain.beta.kubernetes.io/region"]
+		ci.NodeList[i].GeoInfo["Zone"] = nodes.Items[i].Labels["failure-domain.beta.kubernetes.io/zone"]
 		responseTokenizer(ci,ci.NodeList[i].NodeName,i)
 	}
 
@@ -433,8 +441,4 @@ func responseTokenizer(ci *ClusterInfo, nodename string,indexnum int) {
 	quatesflag = false
 	valueflag = false
 	sharpflag = false
-}
-
-func homeDir() string {
-	return "/usr/local/bin/config"
 }

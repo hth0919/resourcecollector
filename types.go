@@ -30,7 +30,6 @@ type NodeInfo struct {
 	XXX_unrecognized     []byte             `json:"-"`
 	XXX_sizecache        int32              `json:"-"`
 }
-
 type PodInfo struct {
 	PodName              string             `protobuf:"bytes,1,opt,name=PodName,proto3" json:"PodName,omitempty"`
 	PodMetrics           map[string]float64 `protobuf:"bytes,2,rep,name=PodMetrics,proto3" json:"PodMetrics,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"fixed64,2,opt,name=value,proto3"`
@@ -38,9 +37,9 @@ type PodInfo struct {
 	XXX_unrecognized     []byte             `json:"-"`
 	XXX_sizecache        int32              `json:"-"`
 }
-
-type TimeTick struct {
+type ReturnValue struct {
 	Tick                 int64    `protobuf:"varint,1,opt,name=Tick,proto3" json:"Tick,omitempty"`
+	ClusterName          string   `protobuf:"bytes,2,opt,name=ClusterName,proto3" json:"ClusterName,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`

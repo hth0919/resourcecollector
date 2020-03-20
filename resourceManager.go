@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-	"k8s.io/client-go/tools/clientcmd"
 )
 
 func initmeticmap() map[string]float64 {

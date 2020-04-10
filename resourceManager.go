@@ -196,6 +196,7 @@ func FindOrMakePodInfo(name string, pil []*PodInfo) (*PodInfo,int, ) {
 	var result PodInfo
 	result = PodInfo{
 		PodName: name,
+		PodNamespace: "",
 		PodMetrics: initmeticmap(),
 	}
 
@@ -204,6 +205,12 @@ func FindOrMakePodInfo(name string, pil []*PodInfo) (*PodInfo,int, ) {
 			return pil[i], i
 		}
 	}
+	po, err := cs.clientSet.CoreV1().Pods(metav1.NamespaceAll).Get(name,metav1.GetOptions{})
+	if err != nil {
+		panic(err.Error())
+	}
+	ns := po.Namespace
+	result.PodNamespace = ns
 	pil = append(pil, &result)
 	return &result, -1
 }

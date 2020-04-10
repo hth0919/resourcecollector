@@ -29,7 +29,8 @@ message NodeInfo {
 }
 message PodInfo{
 	string PodName = 1;
-	map<string, double> PodMetrics = 2;
+	string PodNamespace = 2;
+	map<string, double> PodMetrics = 3;
 }
 
 message ReturnValue {

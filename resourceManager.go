@@ -205,13 +205,15 @@ func FindOrMakePodInfo(name string, pil []*PodInfo) (*PodInfo,int, ) {
 			return pil[i], i
 		}
 	}
-	if name != "" {
-		po, err := cs.clientSet.CoreV1().Pods(metav1.NamespaceAll).Get(name, metav1.GetOptions{})
-		if err != nil {
-			panic(err.Error())
+	po, err := cs.clientSet.CoreV1().Pods(metav1.NamespaceAll).List(metav1.ListOptions{})
+	if err != nil {
+		panic(err.Error())
+	}
+	for i := 0;i<len(po.Items);i++ {
+		if name == po.Items[i].Name {
+			ns := po.Items[i].Namespace
+			result.PodNamespace = ns
 		}
-		ns := po.Namespace
-		result.PodNamespace = ns
 	}
 	pil = append(pil, &result)
 	return &result, -1

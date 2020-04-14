@@ -444,11 +444,11 @@ func responseTokenizer(ci *ClusterInfo, nodename string,indexnum int) {
 	// 결과 출력
 	bytes, _ := ioutil.ReadAll(resp.Body)
 	str := string(bytes) //바이트를 문자열로
-	filename := nodename + ".txt"
+	/*filename := nodename + ".txt"
 	err = ioutil.WriteFile(filename, bytes, 0)
 	if err != nil {
 		panic(err)
-	}
+	}*/
 	ci.NodeList[indexnum].PodList = parser(ci, str, indexnum)
 	strbuf = []rune{}
 	ch = -1

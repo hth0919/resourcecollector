@@ -82,6 +82,10 @@ var quatesflag bool = false
 var valueflag bool= false
 var sharpflag bool= false
 
+func (clients *ClientSet)SetCS() {
+	cs = clients
+}
+
 func (ci *ClusterInfo)NewClusterClient(masterUri string) {
 	ci.ClusterMetricSum =initmeticmap()
 
@@ -109,7 +113,6 @@ func (ci *ClusterInfo)NewClusterClient(masterUri string) {
 			ci.AdminToken = strings.TrimSpace(ci.AdminToken)
 		}
 	}
-
 }
 
 func (ci *ClusterInfo)NodeListInit() {

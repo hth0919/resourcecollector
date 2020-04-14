@@ -5,5 +5,5 @@ import (
 )
 
 type ClientSet struct {
-	clientSet        *kubernetes.Clientset
+	ClientSet        *kubernetes.Clientset
 }
